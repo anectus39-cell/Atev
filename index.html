@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ATEV Online Stationary</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F5F2;--card:#fff;--ink:#14213D;--mute:#5b6577;--line:#d9dee6;--hi:#FFD60A;--ok:#1f7a4d;--no:#b3261e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1624;--card:#18233a;--ink:#eef1f7;--mute:#9aa6bd;--line:#2b3956;--ok:#5fd39b;--no:#ff8a80}}
+:root[data-theme="dark"]{--bg:#0f1624;--card:#18233a;--ink:#eef1f7;--mute:#9aa6bd;--line:#2b3956;--ok:#5fd39b;--no:#ff8a80}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Bricolage Grotesque",system-ui,sans-serif;padding-bottom:84px}
+main{max-width:560px;margin:0 auto;padding:0 16px}
+h1{font-size:44px;font-weight:800;letter-spacing:-1px;margin:22px 0 2px}
+h1 span{background:linear-gradient(transparent 55%,var(--hi) 55%,var(--hi) 92%,transparent 92%);padding:0 4px}
+.sub{color:var(--mute);margin:0 0 14px}
+nav{display:flex;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5}
+nav button{flex:1;padding:10px 6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:600 15px inherit;font-family:inherit;cursor:pointer}
+nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+.row .t{flex:1;min-width:0}
+.row b{display:block}
+.price{color:var(--mute);font-size:14px}
+.tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid currentColor}
+.ok{color:var(--ok)}.no{color:var(--no)}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button,.btn{border:0;border-radius:10px;font:600 16px inherit;font-family:inherit;cursor:pointer}
+.qty button{width:36px;height:36px;background:var(--hi);color:#14213D;font-size:20px}
+.qty button:disabled{opacity:.35}
+.btn{background:var(--ink);color:var(--bg);padding:13px 16px;width:100%}
+.btn.hi{background:var(--hi);color:#14213D}
+label{display:block;font-weight:600;margin:12px 0 4px}
+input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
+.seg{display:flex;gap:8px}.seg label{flex:1;margin:0;font-weight:400}
+.seg input{display:none}
+.seg span{display:block;text-align:center;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.seg input:checked+span{background:var(--hi);color:#14213D;border-color:var(--hi);font-weight:600}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line)}
+.bar .btn{max-width:528px;display:block;margin:0 auto}
+.steps{display:flex;gap:4px;margin:10px 0 2px}
+.steps i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--hi)}
+.hide{display:none!important}
+.note{color:var(--mute);font-size:13px}
+.adm input.p{width:90px}
+.sum{font-weight:800;font-size:20px;margin:14px 0 8px}
+</style>
+</head>
+<body>
+<main>
+<h1><span>ATEV</span></h1>
+<p class="sub">Stationery ya CIVE, UDOM. Agiza bila foleni.</p>
+<nav role="tablist">
+<button role="tab" data-t="shop" aria-selected="true">Huduma</button>
+<button role="tab" data-t="orders" aria-selected="false">Oda zangu</button>
+<button role="tab" data-t="admin" aria-selected="false">Admin</button>
+</nav>
+
+<section id="shop">
+<div id="list"></div>
+<div id="form" class="hide">
+<div class="sum" id="sum"></div>
+<label for="nm">Jina lako</label><input id="nm" autocomplete="name">
+<label for="ph">Namba ya simu</label><input id="ph" type="tel" autocomplete="tel">
+<label>Utapokeaje?</label>
+<div class="seg">
+<label><input type="radio" name="md" value="Nitachukua mwenyewe" checked><span>Nachukua</span></label>
+<label><input type="radio" name="md" value="Delivery"><span>Delivery</span></label>
+</div>
+<div id="locw" class="hide"><label for="loc">Mahali pa kupelekewa (hostel, darasa)</label><input id="loc"></div>
+<label for="nt">Maelekezo ya kazi</label>
+<textarea id="nt" rows="3" placeholder="Mfano: kurasa 12, rangi nyeusi, pande mbili"></textarea>
+<p id="err" class="no hide"></p>
+<button class="btn hi" id="send" style="margin-top:14px">Tuma oda kupitia WhatsApp</button>
+<p class="note">Oda inafunguka WhatsApp ikiwa tayari kutumwa kwa ATEV.</p>
+</div>
+</section>
+
+<section id="orders" class="hide"><div id="olist"></div></section>
+
+<section id="admin" class="hide">
+<div id="login">
+<label for="pin">PIN ya admin</label><input id="pin" type="password" inputmode="numeric">
+<button class="btn" id="go" style="margin-top:10px">Ingia</button>
+<p class="note">Demo: PIN ni 1234.</p>
+</div>
+<div id="panel" class="hide">
+<p class="note">Badilisha bei na upatikanaji. Mabadiliko haya yanahifadhiwa kwenye simu hii tu hadi database iunganishwe.</p>
+<div id="alist" class="adm"></div>
+<h3>Ongeza bidhaa mpya</h3>
+<label for="an">Jina la bidhaa</label><input id="an" placeholder="Mfano: Stapler">
+<label for="ap">Bei (TSh)</label><input id="ap" type="number" min="0" inputmode="numeric">
+<label for="au">Kipimo (hiari)</label><input id="au" placeholder="kila moja">
+<button class="btn hi" id="addb" style="margin-top:10px">Ongeza bidhaa</button>
+<h3>Oda zilizopokelewa</h3>
+<div id="aord"></div>
+</div>
+</section>
+</main>
+
+<div class="bar hide" id="bar"><button class="btn" id="cartbtn"></button></div>
+
+<script>
+var WA="255612204047";
+var STEPS=["Imepokelewa","Inafanyiwa kazi","Tayari","Inapelekwa","Imekamilika"];
+var DEF=[
+{id:1,n:"Printing nyeusi na nyeupe",p:100,u:"kwa ukurasa",a:true},
+{id:2,n:"Printing ya rangi",p:500,u:"kwa ukurasa",a:true},
+{id:3,n:"Photocopy",p:50,u:"kwa ukurasa",a:true},
+{id:4,n:"Binding",p:2000,u:"kwa kazi",a:false},
+{id:5,n:"Kalamu",p:100,u:"kila moja",a:true},
+{id:6,n:"Rula",p:500,u:"kila moja",a:true},
+{id:7,n:"Plain paper",p:100,u:"kila moja",a:true},
+{id:8,n:"Daftari",p:0,u:"kila moja",a:false}
+];
+function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k==="atev_s"?"atev_s2":k,JSON.stringify(v))}catch(e){}}
+var S=ld("atev_s2",DEF),O=ld("atev_o",[]),C={};
+function $(i){return document.getElementById(i)}
+function tsh(n){return "TSh "+n.toLocaleString("en-US")}
+
+function tab(t){
+["shop","orders","admin"].forEach(function(x){$(x).classList.toggle("hide",x!==t)});
+document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.t===t)});
+if(t==="orders")ro();
+if(t==="admin")ra();
+bar();
+}
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){tab(b.dataset.t)}});
+
+function rs(){
+$("list").innerHTML=S.map(function(s){
+var q=C[s.id]||0;
+return '<div class="row"><div class="t"><b>'+s.n+'</b><span class="price">'+(s.p?tsh(s.p)+" "+s.u:"Bei haijawekwa")+'</span> <span class="tag '+(s.a?"ok":"no")+'">'+(s.a?"Ipo":"Haipo sasa")+'</span></div>'+
+(s.a?'<div class="qty"><button data-d="-1" data-i="'+s.id+'" aria-label="Punguza"'+(q?"":" disabled")+'>−</button><span>'+q+'</span><button data-d="1" data-i="'+s.id+'" aria-label="Ongeza">+</button></div>':"")+'</div>'
+}).join("");
+$("list").querySelectorAll("button").forEach(function(b){b.onclick=function(){
+var i=+b.dataset.i;C[i]=Math.max(0,(C[i]||0)+ +b.dataset.d);if(!C[i])delete C[i];rs();bar()}});
+$("form").classList.toggle("hide",!total().n);
+$("sum").textContent="Jumla: "+tsh(total().t);
+}
+function total(){var n=0,t=0;S.forEach(function(s){var q=C[s.id]||0;n+=q;t+=q*s.p});return{n:n,t:t}}
+function bar(){
+var T=total(),show=T.n>0&&!$("shop").classList.contains("hide");
+$("bar").classList.toggle("hide",!show);
+$("cartbtn").textContent="Kamilisha oda ("+T.n+") · "+tsh(T.t);
+}
+$("cartbtn").onclick=function(){$("form").scrollIntoView({behavior:"smooth"})};
+document.querySelectorAll('input[name=md]').forEach(function(r){r.onchange=function(){
+$("locw").classList.toggle("hide",document.querySelector('input[name=md]:checked').value!=="Delivery")}});
+
+$("send").onclick=function(){
+var nm=$("nm").value.trim(),ph=$("ph").value.trim(),md=document.querySelector('input[name=md]:checked').value,loc=$("loc").value.trim(),nt=$("nt").value.trim();
+var e=$("err");e.classList.add("hide");
+if(!nm||!ph){e.textContent="Weka jina na namba ya simu.";e.classList.remove("hide");return}
+if(md==="Delivery"&&!loc){e.textContent="Weka mahali pa kupelekewa.";e.classList.remove("hide");return}
+var items=S.filter(function(s){return C[s.id]}).map(function(s){return{n:s.n,q:C[s.id],p:s.p}});
+var T=total(),id="A"+String(Date.now()).slice(-5);
+O.unshift({id:id,nm:nm,ph:ph,md:md,loc:loc,nt:nt,items:items,t:T.t,st:0,d:new Date().toLocaleString("sw-TZ")});
+sv("atev_o",O);
+var m="Habari ATEV, oda "+id+"\nJina: "+nm+"\nSimu: "+ph+"\n"+items.map(function(i){return "- "+i.n+" x"+i.q}).join("\n")+
+"\nJumla: "+tsh(T.t)+"\nPokea: "+md+(loc?" ("+loc+")":"")+(nt?"\nMaelekezo: "+nt:"");
+C={};$("nt").value="";rs();bar();
+window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(m),"_blank");
+tab("orders");
+};
+
+function stp(st){return '<div class="steps">'+STEPS.map(function(_,i){return '<i class="'+(i<=st?"on":"")+'"></i>'}).join("")+'</div>'}
+function ro(){
+$("olist").innerHTML=O.length?O.map(function(o){
+return '<div class="row" style="display:block"><b>Oda '+o.id+' · '+tsh(o.t)+'</b><span class="price">'+o.d+' · '+o.md+'</span>'+stp(o.st)+'<b class="ok">'+STEPS[o.st]+'</b></div>'
+}).join(""):'<p class="note">Bado huna oda. Chagua huduma kwenye ukurasa wa Huduma.</p>';
+}
+
+var authed=false;
+$("go").onclick=function(){if($("pin").value==="1234"){authed=true;ra()}else{$("pin").value="";$("pin").placeholder="PIN si sahihi"}};
+function ra(){
+$("login").classList.toggle("hide",authed);$("panel").classList.toggle("hide",!authed);
+if(!authed)return;
+$("alist").innerHTML=S.map(function(s,i){
+return '<div class="row"><div class="t"><b>'+s.n+'</b></div><input class="p" type="number" min="0" value="'+s.p+'" data-i="'+i+'" aria-label="Bei"><button class="qty-b btn '+(s.a?"":"hi")+'" style="width:auto;padding:9px 12px" data-i="'+i+'">'+(s.a?"Zima":"Washa")+'</button><button class="btn del" style="width:auto;padding:9px 12px" data-i="'+i+'" aria-label="Futa">Futa</button></div>'}).join("");
+$("alist").querySelectorAll("input").forEach(function(x){x.onchange=function(){S[+x.dataset.i].p=Math.max(0,+x.value||0);sv("atev_s",S);rs()}});
+$("alist").querySelectorAll("button.qty-b").forEach(function(b){b.onclick=function(){var s=S[+b.dataset.i];s.a=!s.a;sv("atev_s",S);rs();ra()}});
+$("alist").querySelectorAll("button.del").forEach(function(b){b.onclick=function(){var s=S[+b.dataset.i];if(!confirm("Futa "+s.n+"?"))return;delete C[s.id];S.splice(+b.dataset.i,1);sv("atev_s",S);rs();bar();ra()}});
+$("aord").innerHTML=O.length?O.map(function(o,i){
+return '<div class="row" style="display:block"><b>'+o.id+' · '+o.nm+' · '+o.ph+'</b><span class="price">'+o.items.map(function(x){return x.n+" x"+x.q}).join(", ")+' · '+tsh(o.t)+'</span>'+stp(o.st)+
+'<button class="btn hi" style="margin-top:8px" data-i="'+i+'"'+(o.st>=4?" disabled":"")+'>'+(o.st>=4?"Imekamilika":"Hatua inayofuata: "+STEPS[o.st+1])+'</button></div>'}).join(""):'<p class="note">Hakuna oda bado.</p>';
+$("aord").querySelectorAll("button").forEach(function(b){b.onclick=function(){O[+b.dataset.i].st++;sv("atev_o",O);ra()}});
+}
+$("addb").onclick=function(){var n=$("an").value.trim(),p=+$("ap").value,u=$("au").value.trim()||"kila moja";if(!n)return;S.push({id:Date.now(),n:n,p:Math.max(0,p||0),u:u,a:true});sv("atev_s",S);$("an").value="";$("ap").value="";$("au").value="";rs();ra()};
+rs();
+</script>
+</body>
+</html>
