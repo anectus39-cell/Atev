@@ -56,7 +56,7 @@ input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);borde
 <nav role="tablist">
 <button role="tab" data-t="shop" aria-selected="true">Huduma</button>
 <button role="tab" data-t="orders" aria-selected="false">Oda zangu</button>
-<button role="tab" data-t="admin" aria-selected="false">Admin</button>
+<button role="tab" data-t="admin" id="admtab" class="hide" aria-selected="false">Admin</button>
 </nav>
 
 <section id="shop">
@@ -85,7 +85,7 @@ input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);borde
 <div id="login">
 <label for="pin">PIN ya admin</label><input id="pin" type="password" inputmode="numeric">
 <button class="btn" id="go" style="margin-top:10px">Ingia</button>
-<p class="note">Demo: PIN ni 1234.</p>
+
 </div>
 <div id="panel" class="hide">
 <p class="note">Badilisha bei na upatikanaji. Mabadiliko haya yanahifadhiwa kwenye simu hii tu hadi database iunganishwe.</p>
@@ -176,7 +176,7 @@ return '<div class="row" style="display:block"><b>Oda '+o.id+' · '+tsh(o.t)+'</
 }
 
 var authed=false;
-$("go").onclick=function(){if($("pin").value==="1234"){authed=true;ra()}else{$("pin").value="";$("pin").placeholder="PIN si sahihi"}};
+$("go").onclick=function(){if($("pin").value==="7391"){authed=true;ra()}else{$("pin").value="";$("pin").placeholder="PIN si sahihi"}};
 function ra(){
 $("login").classList.toggle("hide",authed);$("panel").classList.toggle("hide",!authed);
 if(!authed)return;
@@ -190,6 +190,7 @@ return '<div class="row" style="display:block"><b>'+o.id+' · '+o.nm+' · '+o.ph
 '<button class="btn hi" style="margin-top:8px" data-i="'+i+'"'+(o.st>=4?" disabled":"")+'>'+(o.st>=4?"Imekamilika":"Hatua inayofuata: "+STEPS[o.st+1])+'</button></div>'}).join(""):'<p class="note">Hakuna oda bado.</p>';
 $("aord").querySelectorAll("button").forEach(function(b){b.onclick=function(){O[+b.dataset.i].st++;sv("atev_o",O);ra()}});
 }
+if(location.hash==="#admin")$("admtab").classList.remove("hide");
 $("addb").onclick=function(){var n=$("an").value.trim(),p=+$("ap").value,u=$("au").value.trim()||"kila moja";if(!n)return;S.push({id:Date.now(),n:n,p:Math.max(0,p||0),u:u,a:true});sv("atev_s",S);$("an").value="";$("ap").value="";$("au").value="";rs();ra()};
 rs();
 </script>
