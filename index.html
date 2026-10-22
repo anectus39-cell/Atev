@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google" content="notranslate">
 <title>ATEV Online Stationary</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -18,7 +19,7 @@ h1{font-size:44px;font-weight:800;letter-spacing:-1px;margin:22px 0 2px}
 h1 span{background:linear-gradient(transparent 55%,var(--hi) 55%,var(--hi) 92%,transparent 92%);padding:0 4px}
 .sub{color:var(--mute);margin:0 0 14px}
 nav{display:flex;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5}
-nav button{flex:1;padding:10px 6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:600 15px inherit;font-family:inherit;cursor:pointer}
+nav button{flex:1;padding:10px 6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:600 15px "Bricolage Grotesque",system-ui,sans-serif;cursor:pointer}
 nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
 .row .t{flex:1;min-width:0}
@@ -27,13 +28,14 @@ nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-colo
 .tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid currentColor}
 .ok{color:var(--ok)}.no{color:var(--no)}
 .qty{display:flex;align-items:center;gap:8px}
-.qty button,.btn{border:0;border-radius:10px;font:600 16px inherit;font-family:inherit;cursor:pointer}
+.qty button,.btn{border:0;border-radius:10px;font:600 16px "Bricolage Grotesque",system-ui,sans-serif;cursor:pointer}
 .qty button{width:36px;height:36px;background:var(--hi);color:#14213D;font-size:20px}
 .qty button:disabled{opacity:.35}
 .btn{background:var(--ink);color:var(--bg);padding:13px 16px;width:100%}
 .btn.hi{background:var(--hi);color:#14213D}
+.btn:disabled{opacity:.5}
 label{display:block;font-weight:600;margin:12px 0 4px}
-input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
+input,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
 .seg{display:flex;gap:8px}.seg label{flex:1;margin:0;font-weight:400}
 .seg input{display:none}
 .seg span{display:block;text-align:center;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
@@ -60,7 +62,7 @@ input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);borde
 </nav>
 
 <section id="shop">
-<div id="list"></div>
+<div id="list"><p class="note">Inapakia huduma...</p></div>
 <div id="form" class="hide">
 <div class="sum" id="sum"></div>
 <label for="nm">Jina lako</label><input id="nm" autocomplete="name">
@@ -74,28 +76,33 @@ input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);borde
 <label for="nt">Maelekezo ya kazi</label>
 <textarea id="nt" rows="3" placeholder="Mfano: kurasa 12, rangi nyeusi, pande mbili"></textarea>
 <p id="err" class="no hide"></p>
-<button class="btn hi" id="send" style="margin-top:14px">Tuma oda kupitia WhatsApp</button>
-<p class="note">Oda inafunguka WhatsApp ikiwa tayari kutumwa kwa ATEV.</p>
+<button class="btn hi" id="send" style="margin-top:14px">Tuma oda</button>
+<p class="note">Oda inahifadhiwa kisha WhatsApp inafunguka ikiwa tayari kutumwa kwa ATEV.</p>
 </div>
 </section>
 
-<section id="orders" class="hide"><div id="olist"></div></section>
+<section id="orders" class="hide">
+<div id="olist"></div>
+<p class="note">Oda zako zinahifadhiwa kwenye simu hii. Ukifuta data za browser hutaziona tena.</p>
+</section>
 
 <section id="admin" class="hide">
 <div id="login">
-<label for="pin">PIN ya admin</label><input id="pin" type="password" inputmode="numeric">
+<label for="em">Email ya admin</label><input id="em" type="email" autocomplete="username">
+<label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
+<p id="lerr" class="no"></p>
 <button class="btn" id="go" style="margin-top:10px">Ingia</button>
-
 </div>
 <div id="panel" class="hide">
-<p class="note">Badilisha bei na upatikanaji. Mabadiliko haya yanahifadhiwa kwenye simu hii tu hadi database iunganishwe.</p>
+<button class="btn" id="out" style="width:auto;padding:9px 14px">Toka</button>
+<div id="seedw" class="hide"><p class="note">Hakuna huduma bado. Weka huduma za mwanzo kisha uzibadilishe.</p><button class="btn hi" id="seed">Weka huduma za mwanzo</button></div>
 <div id="alist" class="adm"></div>
 <h3>Ongeza bidhaa mpya</h3>
 <label for="an">Jina la bidhaa</label><input id="an" placeholder="Mfano: Stapler">
 <label for="ap">Bei (TSh)</label><input id="ap" type="number" min="0" inputmode="numeric">
 <label for="au">Kipimo (hiari)</label><input id="au" placeholder="kila moja">
 <button class="btn hi" id="addb" style="margin-top:10px">Ongeza bidhaa</button>
-<h3>Oda zilizopokelewa</h3>
+<h3>Oda za wateja</h3>
 <div id="aord"></div>
 </div>
 </section>
@@ -103,96 +110,153 @@ input,textarea,select{width:100%;padding:11px;border:1px solid var(--line);borde
 
 <div class="bar hide" id="bar"><button class="btn" id="cartbtn"></button></div>
 
-<script>
-var WA="255612204047";
-var STEPS=["Imepokelewa","Inafanyiwa kazi","Tayari","Inapelekwa","Imekamilika"];
-var DEF=[
-{id:1,n:"Printing nyeusi na nyeupe",p:100,u:"kwa ukurasa",a:true},
-{id:2,n:"Printing ya rangi",p:500,u:"kwa ukurasa",a:true},
-{id:3,n:"Photocopy",p:50,u:"kwa ukurasa",a:true},
-{id:4,n:"Binding",p:2000,u:"kwa kazi",a:false},
-{id:5,n:"Kalamu",p:100,u:"kila moja",a:true},
-{id:6,n:"Rula",p:500,u:"kila moja",a:true},
-{id:7,n:"Plain paper",p:100,u:"kila moja",a:true},
-{id:8,n:"Daftari",p:0,u:"kila moja",a:false}
-];
-function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
-function sv(k,v){try{localStorage.setItem(k==="atev_s"?"atev_s2":k,JSON.stringify(v))}catch(e){}}
-var S=ld("atev_s2",DEF),O=ld("atev_o",[]),C={};
-function $(i){return document.getElementById(i)}
-function tsh(n){return "TSh "+n.toLocaleString("en-US")}
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInAnonymously,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getFirestore,collection,doc,onSnapshot,addDoc,setDoc,updateDoc,deleteDoc,query,where,orderBy,writeBatch} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const app=initializeApp({
+apiKey:"AIzaSyCjlz3t-9yU8PkiytueXahThnLHit4v2W8",
+authDomain:"atev-cd78c.firebaseapp.com",
+projectId:"atev-cd78c",
+storageBucket:"atev-cd78c.firebasestorage.app",
+messagingSenderId:"975115646409",
+appId:"1:975115646409:web:d4b40ca930cb49f7986418"});
+const auth=getAuth(app),db=getFirestore(app);
+
+const WA="255612204047";
+const STEPS=["Imepokelewa","Inafanyiwa kazi","Tayari","Inapelekwa","Imekamilika"];
+const DEF=[
+{n:"Printing nyeusi na nyeupe",p:100,u:"kwa ukurasa",a:true},
+{n:"Printing ya rangi",p:500,u:"kwa ukurasa",a:true},
+{n:"Photocopy",p:50,u:"kwa ukurasa",a:true},
+{n:"Binding",p:2000,u:"kwa kazi",a:false},
+{n:"Kalamu",p:100,u:"kila moja",a:true},
+{n:"Rula",p:500,u:"kila moja",a:true},
+{n:"Plain paper",p:100,u:"kila moja",a:true},
+{n:"Daftari",p:0,u:"kila moja",a:false}];
+let S=[],C={},MY=[],ALL=[],user=null,unMy=null,unAll=null;
+const $=i=>document.getElementById(i);
+const tsh=n=>"TSh "+Number(n).toLocaleString("en-US");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isAdm=()=>!!(user&&user.email);
+const when=t=>new Date(t).toLocaleString("sw-TZ");
 
 function tab(t){
-["shop","orders","admin"].forEach(function(x){$(x).classList.toggle("hide",x!==t)});
-document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.t===t)});
+["shop","orders","admin"].forEach(x=>$(x).classList.toggle("hide",x!==t));
+document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===t));
 if(t==="orders")ro();
 if(t==="admin")ra();
 bar();
 }
-document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){tab(b.dataset.t)}});
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>tab(b.dataset.t));
+function showAdm(){$("admtab").classList.toggle("hide",!(location.hash==="#admin"||isAdm()))}
 
+function total(){let n=0,t=0;S.forEach(s=>{const q=C[s.id]||0;n+=q;t+=q*s.p});return{n,t}}
 function rs(){
-$("list").innerHTML=S.map(function(s){
-var q=C[s.id]||0;
-return '<div class="row"><div class="t"><b>'+s.n+'</b><span class="price">'+(s.p?tsh(s.p)+" "+s.u:"Bei haijawekwa")+'</span> <span class="tag '+(s.a?"ok":"no")+'">'+(s.a?"Ipo":"Haipo sasa")+'</span></div>'+
-(s.a?'<div class="qty"><button data-d="-1" data-i="'+s.id+'" aria-label="Punguza"'+(q?"":" disabled")+'>−</button><span>'+q+'</span><button data-d="1" data-i="'+s.id+'" aria-label="Ongeza">+</button></div>':"")+'</div>'
-}).join("");
-$("list").querySelectorAll("button").forEach(function(b){b.onclick=function(){
-var i=+b.dataset.i;C[i]=Math.max(0,(C[i]||0)+ +b.dataset.d);if(!C[i])delete C[i];rs();bar()}});
-$("form").classList.toggle("hide",!total().n);
-$("sum").textContent="Jumla: "+tsh(total().t);
+$("list").innerHTML=S.length?S.map(s=>{
+const q=C[s.id]||0;
+return '<div class="row"><div class="t"><b>'+esc(s.n)+'</b><span class="price">'+(s.p?tsh(s.p)+" "+esc(s.u):"Bei haijawekwa")+'</span> <span class="tag '+(s.a?"ok":"no")+'">'+(s.a?"Ipo":"Haipo sasa")+'</span></div>'+
+(s.a&&s.p?'<div class="qty"><button data-d="-1" data-i="'+s.id+'" aria-label="Punguza"'+(q?"":" disabled")+'>−</button><span>'+q+'</span><button data-d="1" data-i="'+s.id+'" aria-label="Ongeza">+</button></div>':"")+'</div>'}).join(""):'<p class="note">Huduma zinaandaliwa. Rudi baadaye kidogo.</p>';
+$("list").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+const i=b.dataset.i;C[i]=Math.max(0,(C[i]||0)+ +b.dataset.d);if(!C[i])delete C[i];rs();bar()});
+const T=total();
+$("form").classList.toggle("hide",!T.n);
+$("sum").textContent="Jumla: "+tsh(T.t);
 }
-function total(){var n=0,t=0;S.forEach(function(s){var q=C[s.id]||0;n+=q;t+=q*s.p});return{n:n,t:t}}
 function bar(){
-var T=total(),show=T.n>0&&!$("shop").classList.contains("hide");
+const T=total(),show=T.n>0&&!$("shop").classList.contains("hide");
 $("bar").classList.toggle("hide",!show);
 $("cartbtn").textContent="Kamilisha oda ("+T.n+") · "+tsh(T.t);
 }
-$("cartbtn").onclick=function(){$("form").scrollIntoView({behavior:"smooth"})};
-document.querySelectorAll('input[name=md]').forEach(function(r){r.onchange=function(){
-$("locw").classList.toggle("hide",document.querySelector('input[name=md]:checked').value!=="Delivery")}});
+$("cartbtn").onclick=()=>$("form").scrollIntoView({behavior:"smooth"});
+document.querySelectorAll("input[name=md]").forEach(r=>r.onchange=()=>
+$("locw").classList.toggle("hide",document.querySelector("input[name=md]:checked").value!=="Delivery"));
 
-$("send").onclick=function(){
-var nm=$("nm").value.trim(),ph=$("ph").value.trim(),md=document.querySelector('input[name=md]:checked').value,loc=$("loc").value.trim(),nt=$("nt").value.trim();
-var e=$("err");e.classList.add("hide");
-if(!nm||!ph){e.textContent="Weka jina na namba ya simu.";e.classList.remove("hide");return}
-if(md==="Delivery"&&!loc){e.textContent="Weka mahali pa kupelekewa.";e.classList.remove("hide");return}
-var items=S.filter(function(s){return C[s.id]}).map(function(s){return{n:s.n,q:C[s.id],p:s.p}});
-var T=total(),id="A"+String(Date.now()).slice(-5);
-O.unshift({id:id,nm:nm,ph:ph,md:md,loc:loc,nt:nt,items:items,t:T.t,st:0,d:new Date().toLocaleString("sw-TZ")});
-sv("atev_o",O);
-var m="Habari ATEV, oda "+id+"\nJina: "+nm+"\nSimu: "+ph+"\n"+items.map(function(i){return "- "+i.n+" x"+i.q}).join("\n")+
+function stp(st){return '<div class="steps">'+STEPS.map((_,i)=>'<i class="'+(i<=st?"on":"")+'"></i>').join("")+'</div>'}
+function ro(){
+const L=MY.slice().sort((a,b)=>b.createdAt-a.createdAt);
+$("olist").innerHTML=L.length?L.map(o=>
+'<div class="row" style="display:block"><b>Oda '+esc(o.code)+' · '+tsh(o.t)+'</b><span class="price">'+when(o.createdAt)+' · '+esc(o.md)+'</span>'+stp(o.st)+'<b class="ok">'+STEPS[o.st]+'</b></div>').join(""):'<p class="note">Bado huna oda. Chagua huduma kwenye ukurasa wa Huduma.</p>';
+}
+
+$("send").onclick=async()=>{
+const nm=$("nm").value.trim(),ph=$("ph").value.trim(),md=document.querySelector("input[name=md]:checked").value,loc=$("loc").value.trim(),nt=$("nt").value.trim();
+const e=$("err");e.classList.add("hide");
+const fail=m=>{e.textContent=m;e.classList.remove("hide")};
+if(!nm||!ph)return fail("Weka jina na namba ya simu.");
+if(md==="Delivery"&&!loc)return fail("Weka mahali pa kupelekewa.");
+if(!user)return fail("Bado inaunganisha. Jaribu tena baada ya sekunde chache.");
+const items=S.filter(s=>C[s.id]).map(s=>({n:s.n,q:C[s.id],p:s.p}));
+const T=total(),code="A"+Math.random().toString(36).slice(2,6).toUpperCase();
+const m="Habari ATEV, oda "+code+"\nJina: "+nm+"\nSimu: "+ph+"\n"+items.map(i=>"- "+i.n+" x"+i.q).join("\n")+
 "\nJumla: "+tsh(T.t)+"\nPokea: "+md+(loc?" ("+loc+")":"")+(nt?"\nMaelekezo: "+nt:"");
-C={};$("nt").value="";rs();bar();
-window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(m),"_blank");
-tab("orders");
+const url="https://wa.me/"+WA+"?text="+encodeURIComponent(m);
+const w=window.open("about:blank","_blank");
+$("send").disabled=true;
+try{
+await addDoc(collection(db,"orders"),{code,uid:user.uid,nm,ph,md,loc,nt,items,t:T.t,st:0,createdAt:Date.now()});
+C={};$("nt").value="";rs();bar();tab("orders");
+if(w)w.location.href=url;else location.href=url;
+}catch(x){
+if(w)w.close();
+fail("Oda haikutumwa. Angalia intaneti kisha jaribu tena.");
+}
+$("send").disabled=false;
 };
 
-function stp(st){return '<div class="steps">'+STEPS.map(function(_,i){return '<i class="'+(i<=st?"on":"")+'"></i>'}).join("")+'</div>'}
-function ro(){
-$("olist").innerHTML=O.length?O.map(function(o){
-return '<div class="row" style="display:block"><b>Oda '+o.id+' · '+tsh(o.t)+'</b><span class="price">'+o.d+' · '+o.md+'</span>'+stp(o.st)+'<b class="ok">'+STEPS[o.st]+'</b></div>'
-}).join(""):'<p class="note">Bado huna oda. Chagua huduma kwenye ukurasa wa Huduma.</p>';
+function ra(){
+const ad=isAdm();
+$("login").classList.toggle("hide",ad);$("panel").classList.toggle("hide",!ad);
+if(!ad)return;
+$("seedw").classList.toggle("hide",S.length>0);
+$("alist").innerHTML=S.map((s,i)=>
+'<div class="row"><div class="t"><b>'+esc(s.n)+'</b></div><input class="p" type="number" min="0" value="'+s.p+'" data-i="'+i+'" aria-label="Bei"><button class="btn tg '+(s.a?"":"hi")+'" style="width:auto;padding:9px 12px" data-i="'+i+'">'+(s.a?"Zima":"Washa")+'</button><button class="btn dl" style="width:auto;padding:9px 12px" data-i="'+i+'">Futa</button></div>').join("");
+$("alist").querySelectorAll("input").forEach(x=>x.onchange=()=>updateDoc(doc(db,"services",S[+x.dataset.i].id),{p:Math.max(0,+x.value||0)}).catch(()=>alert("Imeshindwa kuhifadhi.")));
+$("alist").querySelectorAll("button.tg").forEach(b=>b.onclick=()=>{const s=S[+b.dataset.i];updateDoc(doc(db,"services",s.id),{a:!s.a}).catch(()=>alert("Imeshindwa kuhifadhi."))});
+$("alist").querySelectorAll("button.dl").forEach(b=>b.onclick=()=>{const s=S[+b.dataset.i];if(confirm("Futa "+s.n+"?")){delete C[s.id];deleteDoc(doc(db,"services",s.id)).catch(()=>alert("Imeshindwa kufuta."))}});
+$("aord").innerHTML=ALL.length?ALL.map((o,i)=>
+'<div class="row" style="display:block"><b>'+esc(o.code)+' · '+esc(o.nm)+' · '+esc(o.ph)+'</b><span class="price">'+o.items.map(x=>esc(x.n)+" x"+x.q).join(", ")+' · '+tsh(o.t)+'<br>'+esc(o.md)+(o.loc?" ("+esc(o.loc)+")":"")+(o.nt?"<br>"+esc(o.nt):"")+'<br>'+when(o.createdAt)+'</span>'+stp(o.st)+
+'<button class="btn hi" style="margin-top:8px" data-i="'+i+'"'+(o.st>=4?" disabled":"")+'>'+(o.st>=4?"Imekamilika":"Hatua inayofuata: "+STEPS[o.st+1])+'</button></div>').join(""):'<p class="note">Hakuna oda bado.</p>';
+$("aord").querySelectorAll("button").forEach(b=>b.onclick=()=>{const o=ALL[+b.dataset.i];updateDoc(doc(db,"orders",o.id),{st:o.st+1}).catch(()=>alert("Imeshindwa kuhifadhi."))});
 }
 
-var authed=false;
-$("go").onclick=function(){if($("pin").value==="7391"){authed=true;ra()}else{$("pin").value="";$("pin").placeholder="PIN si sahihi"}};
-function ra(){
-$("login").classList.toggle("hide",authed);$("panel").classList.toggle("hide",!authed);
-if(!authed)return;
-$("alist").innerHTML=S.map(function(s,i){
-return '<div class="row"><div class="t"><b>'+s.n+'</b></div><input class="p" type="number" min="0" value="'+s.p+'" data-i="'+i+'" aria-label="Bei"><button class="qty-b btn '+(s.a?"":"hi")+'" style="width:auto;padding:9px 12px" data-i="'+i+'">'+(s.a?"Zima":"Washa")+'</button><button class="btn del" style="width:auto;padding:9px 12px" data-i="'+i+'" aria-label="Futa">Futa</button></div>'}).join("");
-$("alist").querySelectorAll("input").forEach(function(x){x.onchange=function(){S[+x.dataset.i].p=Math.max(0,+x.value||0);sv("atev_s",S);rs()}});
-$("alist").querySelectorAll("button.qty-b").forEach(function(b){b.onclick=function(){var s=S[+b.dataset.i];s.a=!s.a;sv("atev_s",S);rs();ra()}});
-$("alist").querySelectorAll("button.del").forEach(function(b){b.onclick=function(){var s=S[+b.dataset.i];if(!confirm("Futa "+s.n+"?"))return;delete C[s.id];S.splice(+b.dataset.i,1);sv("atev_s",S);rs();bar();ra()}});
-$("aord").innerHTML=O.length?O.map(function(o,i){
-return '<div class="row" style="display:block"><b>'+o.id+' · '+o.nm+' · '+o.ph+'</b><span class="price">'+o.items.map(function(x){return x.n+" x"+x.q}).join(", ")+' · '+tsh(o.t)+'</span>'+stp(o.st)+
-'<button class="btn hi" style="margin-top:8px" data-i="'+i+'"'+(o.st>=4?" disabled":"")+'>'+(o.st>=4?"Imekamilika":"Hatua inayofuata: "+STEPS[o.st+1])+'</button></div>'}).join(""):'<p class="note">Hakuna oda bado.</p>';
-$("aord").querySelectorAll("button").forEach(function(b){b.onclick=function(){O[+b.dataset.i].st++;sv("atev_o",O);ra()}});
-}
-if(location.hash==="#admin")$("admtab").classList.remove("hide");
-$("addb").onclick=function(){var n=$("an").value.trim(),p=+$("ap").value,u=$("au").value.trim()||"kila moja";if(!n)return;S.push({id:Date.now(),n:n,p:Math.max(0,p||0),u:u,a:true});sv("atev_s",S);$("an").value="";$("ap").value="";$("au").value="";rs();ra()};
-rs();
+$("go").onclick=async()=>{
+$("lerr").textContent="";
+try{await signInWithEmailAndPassword(auth,$("em").value.trim(),$("pw").value);$("pw").value=""}
+catch(e){$("lerr").textContent="Email au password si sahihi."}
+};
+$("out").onclick=()=>signOut(auth);
+$("seed").onclick=async()=>{
+try{const b=writeBatch(db);DEF.forEach((s,i)=>b.set(doc(collection(db,"services")),{...s,o:i}));await b.commit()}
+catch(e){alert("Imeshindwa. Angalia sheria za Firestore.")}
+};
+$("addb").onclick=async()=>{
+const n=$("an").value.trim(),p=+$("ap").value,u=$("au").value.trim()||"kila moja";
+if(!n)return;
+try{await addDoc(collection(db,"services"),{n,p:Math.max(0,p||0),u,a:true,o:Date.now()});$("an").value="";$("ap").value="";$("au").value=""}
+catch(e){alert("Imeshindwa kuongeza.")}
+};
+
+onSnapshot(query(collection(db,"services"),orderBy("o")),s=>{
+S=s.docs.map(d=>({id:d.id,...d.data()}));
+Object.keys(C).forEach(k=>{if(!S.some(x=>x.id===k))delete C[k]});
+rs();bar();ra()},
+()=>{$("list").innerHTML='<p class="no">Huduma hazikupakia. Angalia intaneti kisha fungua upya.</p>'});
+
+onAuthStateChanged(auth,u=>{
+user=u;
+if(unMy){unMy();unMy=null}
+if(unAll){unAll();unAll=null}
+if(!u){signInAnonymously(auth).catch(()=>{});return}
+showAdm();
+unMy=onSnapshot(query(collection(db,"orders"),where("uid","==",u.uid)),s=>{MY=s.docs.map(d=>({id:d.id,...d.data()}));ro()},()=>{});
+if(u.email){
+unAll=onSnapshot(query(collection(db,"orders"),orderBy("createdAt","desc")),s=>{ALL=s.docs.map(d=>({id:d.id,...d.data()}));ra()},()=>{});
+}else{ALL=[]}
+ra();
+});
+showAdm();
 </script>
 </body>
 </html>
